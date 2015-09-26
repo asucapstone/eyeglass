@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Capstone</title>
+    <style>
+      #video { width:100%; height:100%; position:fixed;}
+    </style>
+  </head>
+  <body>
+<div id="video">
+    <video width="100%" height="100%" autoplay>
+        <source src="20150912_142740_562.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+    </video>
+    <script>
+
+    (function () {
+        $("#video").bind("loadedmetadata", function () {
+            var width = this.videoWidth;
+            var height = this.videoHeight;
+            console.log(width);
+            console.log(height);
+        });
+        console.log(loadedmetadata.width);
+
+    });        console.log(loadedmetadata.width);
+
+    </script>
+</div>
+  </body>
+</html>

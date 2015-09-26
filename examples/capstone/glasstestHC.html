@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Capstone</title>
+    <style>
+    .cd-panel {
+      /*...*/
+        visibility: hidden;
+      transition: visibility 0s 0.6s;
+    }
+
+    .cd-panel.is-visible {
+      visibility: visible;
+      transition: visibility 0s 0s;
+    }
+
+    .cd-panel-header {
+      /*...*/
+      position: fixed;
+      top: -50px;
+      width: 90%;
+      height: 50px;
+      transition: top 0.3s 0s;
+    }
+
+    .is-visible .cd-panel-header {
+      top: 0;
+      transition: top 0.3s 0.3s;
+    }
+
+    .cd-panel-container {
+      /*...*/
+      position: fixed;
+      width: 90%;
+      height: 100%;
+      top: 0;
+      right: 0;
+
+      transition-property: transform;
+      transition-duration: 0.3s;
+      transition-delay: 0.3s;
+
+      transform: translate3d(100%, 0, 0);
+    }
+
+    .is-visible .cd-panel-container {
+      transform: translate3d(0, 0, 0);
+      transition-delay: 0s;
+    }<-->
+    </style>
+  </head>
+  <body>
+
+<main class="cd-main-content">
+	<!-- your main content here -->
+  main STUFF
+</main>
+
+<div class="cd-panel from-right">
+	<header class="cd-panel-header">
+		<h1>Title Goes Here</h1>
+	<!-->	<a href="#0" class="cd-panel-close">Close</a> -->
+	</header>
+
+	<div class="cd-panel-container">
+		<div class="cd-panel-content">
+			<!-- your side content here -->
+
+      side panel
+		</div> <!-- cd-panel-content -->
+    top
+	</div> <!-- cd-panel-container -->
+  current
+</div> <!-- cd-panel -->
+
+
+</body>
+</html>

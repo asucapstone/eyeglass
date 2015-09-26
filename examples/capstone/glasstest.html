@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Capstone</title>
+
+
+
+<!-->
+    <style>
+    .cd-panel {
+      /*...*/
+        visibility: hidden;
+      transition: visibility 0s 0.6s;
+    }
+
+    .cd-panel.is-visible {
+      visibility: visible;
+      transition: visibility 0s 0s;
+    }
+
+    .cd-panel-header {
+      /*...*/
+      position: fixed;
+      top: -50px;
+      width: 90%;
+      height: 50px;
+      transition: top 0.3s 0s;
+    }
+
+    .is-visible .cd-panel-header {
+      top: 0;
+      transition: top 0.3s 0.3s;
+    }
+
+    .cd-panel-container {
+      /*...*/
+      position: fixed;
+      width: 90%;
+      height: 100%;
+      top: 0;
+      right: 0;
+
+      transition-property: transform;
+      transition-duration: 0.3s;
+      transition-delay: 0.3s;
+
+      transform: translate3d(100%, 0, 0);
+    }
+
+    .is-visible .cd-panel-container {
+      transform: translate3d(0, 0, 0);
+      transition-delay: 0s;
+    }
+    </style>
+    <!-->
+    <script src="../../src/require.js" ></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+
+  </head>
+  <body>
+    <!-->
+
+<main class="cd-main-content">
+<!-->
+
+  main STUFF
+
+client side
+
+  <a href='linkhref.html' id='mylink'>click me</a>
+  <script type="text/javascript">
+
+  var myLink = document.getElementById('mylink');
+
+  myLink.onclick = function(){
+
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = "./demo.js";
+      document.getElementsByTagName("head")[0].appendChild(script);
+      return false;
+//server side
+  }
+  </script>
+
+test
+
+
+
+
+
+
+<button id="rew" onclick="server.adb()">adb</button>
+
+
+  <script>
+
+/*
+  require(['require','../../node_modules/adb.js'], function (require) {
+      //foo is now loaded.
+      var DebugBridge = require('../../node_modules/adb.js').DebugBridge;
+
+          var adb = new DebugBridge();
+          //heloo
+        adb.listDevices
+      });
+*/
+$(document).ready(function() {
+    $.ajax({
+        type: "GET",
+        url: "../../data/eyeframe.txt",
+        dataType: "text",
+        success:  function(data) {processData(data);}
+     });
+});
+
+$(document).ready(function() {
+    $.ajax({
+        type: "GET",
+        url: "../../data/eyeframe.txt",
+        dataType: "text",
+        success:  function(data) {processData(data);}
+     });
+});
+
+function processData(allText) {
+    var record_num = 5;  // or however many elements there are in each row
+    var allTextLines = allText.split(/\r\n|\n/);
+    var entries = allTextLines[0].split(',');
+    var lines = [];
+
+    var headings = entries.splice(0,record_num);
+    while (entries.length>0) {
+        var tarr = [];
+        for (var j=0; j<record_num; j++) {
+            tarr.push(headings[j]+":"+entries.shift());
+        }
+        lines.push(tarr);
+    }
+     alert(lines);
+}
+
+  </script>
+
+
+
+  <script>
+
+
+  /*<script src="/socket.io/socket.io.js">
+  var socket = io.connect('http://localhost'); // connec to server
+    socket.on('news', function (data) { // listen to news event raised by the server
+    //  console.log(data);
+      socket.emit('my other event', { my: 'data' }); // raise an event on the server
+    });
+    */
+  </script>
+
+
+
+
+  <!-->
+
+
+</main>
+
+<div class="cd-panel from-right">
+	<header class="cd-panel-header">
+		<h1>Capstone</h1>
+	<a href="#0" class="cd-panel-close">Close</a>
+	</header>
+
+	<div class="cd-panel-container">
+		<div class="cd-panel-content">
+			 side content here
+
+      side panel
+		</div> cd-panel-content
+    top
+	</div> cd-panel-container
+  current
+</div> cd-panel
+
+<!-->
+
+
+
+</body>
+</html>
