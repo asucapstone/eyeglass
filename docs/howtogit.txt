@@ -12,15 +12,18 @@ to see differences in a file:
 'git diff'
 
 before commit, you might have to configure your git:
-git config --global user.name 'Your Name'
-git config --global user.email you@somedomain.com
+'git config --global user.name 'Your Name''
+'git config --global user.email you@somedomain.com'
 
 to commit, with message
-git commit -m 'my hola mundo changes'
+'git commit -m 'my hola mundo changes''
 
 or to commit all entire project:
-git commit -am "message to changes "
+'git commit -am "message to changes "'
 
+
+to get changes before pushing
+'git pull origin'
 
 push changes to master branch
-git push origin master
+'git push origin master'
