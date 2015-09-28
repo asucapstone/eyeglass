@@ -1,0 +1,204 @@
+#!/usr/bin/env node
+
+var colors     = require('colors'),
+    httpServer = require('../lib/http-server'),
+    portfinder = require('portfinder'),
+    opener = require('opener'),
+    argv = require('optimist')
+      .boolean('cors')
+      .argv;
+
+
+if (argv.h || argv.help) {
+  console.log([
+    "usage: http-server [path] [options]",
+    "",
+    "options:",
+    "  -p                 Port to use [8080]",
+    "  -a                 Address to use [0.0.0.0]",
+    "  -d                 Show directory listings [true]",
+    "  -i                 Display autoIndex [true]",
+    "  -e --ext           Default file extension if none supplied [none]",
+    "  -s --silent        Suppress log messages from output",
+    "  --cors             Enable CORS via the 'Access-Control-Allow-Origin' header",
+    "  -o [path]          Open browser window after starting the server",
+    "  -c                 Cache time (max-age) in seconds [3600], e.g. -c10 for 10 seconds.",
+    "                     To disable caching, use -c-1.",
+    "",
+    "  -P --proxy         Fallback proxy if the request cannot be resolved. e.g.: http://someurl.com",
+    "",
+    "  -S --ssl           Enable https.",
+    "  -C --cert          Path to ssl cert file (default: cert.pem).",
+    "  -K --key           Path to ssl key file (default: key.pem).",
+    "",
+    "  -r --robots        Respond to /robots.txt [User-agent: *\\nDisallow: /]",
+    "  -h --help          Print this list and exit."
+  ].join('\n'));
+  process.exit();
+}
+
+var port = argv.p || parseInt(process.env.PORT, 10),
+    host = argv.a || '0.0.0.0',
+    log = (argv.s || argv.silent) ? (function () {}) : console.log,
+    ssl = !!argv.S || !!argv.ssl,
+    proxy = argv.P || argv.proxy,
+    requestLogger;
+
+if (!argv.s && !argv.silent) {
+  requestLogger = function(req, res, error) {
+    var date = (new Date).toUTCString();
+    if (error) {
+      log('[%s] "%s %s" Error (%s): "%s"', date, req.method.red, req.url.red, error.status.toString().red, error.message.red);
+    }
+    else if(req.method=='GET' && req.url=='/data/hack.txt'){
+      var DebugBridge = require('/Users/Hector/Dropbox/2School15/capstone/eyeglass-master/node_modules/adb.js').DebugBridge;
+
+      var adb = new DebugBridge();
+
+      adb.getVersion(function (version) {
+          console.log('Android Debug Bridge version 1.0.%d', version);
+      });
+
+      log('***************cmdtest*hc');
+      //adb.execCommand('devices', function (stdout) {log( stdout); });
+      adb.execCommand('uptime');
+      log('***************cmdtest*hc');
+
+      /*adb.listDevices(function (devices) {
+          log('found %d device %s', devices.length, devices);
+      });
+*/
+
+  /*
+      adb.traceDevice(function (devices) {
+          log('found %d device %s', devices.length, devices);
+
+          for (var i=0; i<devices.length; i++) {
+              var device = devices[i];
+
+              device.takeSnapshot(function (frame) {
+                  frame.writeImageFile('snapshot.jpg');
+              });
+
+
+              device.getSyncService(function (svc) {
+                  svc.pullFile('/system/framework/framework.odex', './framework.odex', function (size) {
+                      console.log("pull %d bytes file", size);
+                    });
+              });
+
+          }
+      });
+*/
+
+    }
+
+     else {
+      log('[%s] "%s %s" "%s"', date, req.method.cyan, req.url.cyan, req.headers['user-agent']);
+    }
+  };
+}
+
+if (!port) {
+  portfinder.basePort = 8080;
+  portfinder.getPort(function (err, port) {
+    if (err) throw err;
+    listen(port);
+  });
+} else {
+  listen(port);
+}
+
+function listen(port) {
+  var options = {
+    root: argv._[0],
+    cache: argv.c,
+    showDir: argv.d,
+    autoIndex: argv.i,
+    robots: argv.r || argv.robots,
+    ext: argv.e || argv.ext,
+    logFn: requestLogger,
+    proxy: proxy
+  };
+
+  if (argv.cors) {
+    options.cors = true;
+  }
+
+  if (ssl) {
+    options.https = {
+      cert: argv.C || argv.cert || 'cert.pem',
+      key: argv.K || argv.key || 'key.pem'
+    };
+  }
+
+  var server = httpServer.createServer(options);
+  server.listen(port, host, function () {
+    var canonicalHost = host === '0.0.0.0' ? '127.0.0.1' : host,
+        protocol      = ssl ? 'https:' : 'http:';
+
+    log('Starting up http-server, serving '.yellow
+      + server.root.cyan
+      + (ssl ? (' through'.yellow + ' https'.cyan) : '')
+      + ' on: '.yellow
+      + (protocol + '//' + host + ':' + port).cyan);
+
+    if (typeof proxy === 'string') {
+      log('Unhandled requests will be served from: ' + proxy);
+    }
+
+    log('Hit CTRL-C to stop the server');
+    if (argv.o) {
+      opener(
+        protocol + '//' + canonicalHost + ':' + port,
+        { command: argv.o !== true ? argv.o : null }
+      );
+    }
+    if(argv.g){
+      /*
+	var adbhost = require('adbhost');
+	var adb   = adbhost.createConnection({host: process.argv[2]});
+	var shell = adb.createStream('shell:');
+	process.stdin.pipe(shell);
+	shell.pipe(process.stdout);
+  */
+//  server.adb();
+
+/*
+  var DebugBridge = require('/Users/Hector/Dropbox/2School15/capstone/heatmap.js-master/node_modules/adb.js').DebugBridge;
+  var adb = new DebugBridge();
+  log( adb.listDevices());
+
+*/
+	}
+  });
+}
+
+if (process.platform === 'win32') {
+  require('readline').createInterface({
+    input: process.stdin,
+    output: process.stdout
+  }).on('SIGINT', function () {
+    process.emit('SIGINT');
+  });
+}
+
+process.on('SIGINT', function() {
+  log('http-server stopped.'.red);
+  process.exit();
+
+});
+
+//[System.Web.Services.WebMethods]
+
+
+//this is added
+/*HC
+var spawn = require('child_process').spawn;
+
+//var _ = require('underscore'); // for some utility goodness
+var deploySh = spawn('sh', [ '/Users/Hector/Downloads/heatmap.js-master/examples/capstone/script.sh' ], {
+  cwd: process.env.HOME + '/examples/capstone/'
+//,  env:_.extend(process.env, { PATH: process.env.PATH + ':/usr/local/bin' })
+});
+*/

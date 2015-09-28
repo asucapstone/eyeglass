@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width; height=device-height;"></meta>
+
+    <title>Capstone</title>
+    <style>
+    body, html { margin:0; padding:0; height:100%;}
+    body { font-family:sans-serif; }
+    body * { font-weight:200;}
+    #heatmapContainerWrapper { width:100%; height:100%; position:absolute;         background: rgba(0,0,0,.8) !important;}
+    #heatmapContainer { width:100%; height:100%;        background: rgba(0,0,0,.8) !important;}
+    #all-examples-info { position:absolute; background:white; font-size:16px; padding:20px; top:100px; width:350px; line-height:150%; border:1px solid rgba(0,0,0,.2);}
+    #heatmapContainer {  box-shadow: 0 0 15px #000;}
+    #heatmapContainer {position: absolute;top: 0;right: 0;bottom: 0;left: 0;margin: auto;max-width: 100%;max-height: 100%;}
+    #heatmapContainer:focus {outline-width: 0;}
+
+    </style>
+
+  </head>
+  <body>
+    <div id="heatmapContainerWrapper">
+      <div id="heatmapContainer">
+        <video autoplay controls>
+            <source src="../data/20150912_142740_562.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+        </video>
+      </div>
+
+    </div>
+    <h1>Capstone</h1>
+
+ <!--><video width="100%" height="100%" autoplay>
+    <source src="file:////Users/Hector/AndroidDev20150912_142740_562.mp4" type="video/mp4">
+ <source src="file:////Users/Hector/AndroidDev20150912_142740_562.mp4"  type="video/ogg">
+Your browser does not support the video tag.
+</video>
+<!-->
+    <script src="/build/heatmap.js"></script>
+
+    <script>
+//server: https://github.com/indexzero/http-server
+//nodejs : sudo http-server ./ -p 1337
+//python:  python -m SimpleHTTPServer 1337
+      window.onload = function() {
+        // create a heatmap instance
+
+        var heatmap = h337.create({
+          container: document.getElementById('heatmapContainer'),
+          maxOpacity: .6, //transparency
+          radius: 20, //dot radius
+          blur: .90,
+          // backgroundColor with alpha so you can see through it
+        //  backgroundColor: 'rgba(0, 0, 58, 0.96)'
+          backgroundColor:'transparent'
+        });
+        var heatmapContainer = document.getElementById('heatmapContainerWrapper');
+
+        heatmapContainer.onmousemove = heatmapContainer.ontouchmove = function(e) {
+          // we need preventDefault for the touchmove
+          e.preventDefault();
+          var x = e.layerX;
+          var y = e.layerY;
+          if (e.touches) {
+            x = e.touches[0].pageX;
+            y = e.touches[0].pageY;
+          }
+
+          heatmap.addData({ x: x, y: y, value: 1 });
+
+        };
+
+        heatmapContainer.onclick = function(e) {
+          var x = e.layerX;
+          var y = e.layerY;
+          heatmap.addData({ x: x, y: y, value: 1 });
+        };
+
+      };
+    </script>
+  </body>
+</html>

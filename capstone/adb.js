@@ -231,6 +231,8 @@ DebugBridge.prototype.getVersion = function (callback /* (version: number) */) {
     });
 };
 
+
+
 function parseDevices(adb, data) {
     var lines = data.toString().split('\n');
     var devices = [];
