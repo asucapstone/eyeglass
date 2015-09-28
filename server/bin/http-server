@@ -55,42 +55,41 @@ if (!argv.s && !argv.silent) {
 
       var adb = new DebugBridge();
 
-      adb.getVersion(function (version) {
+    /*  adb.getVersion(function (version) {
           console.log('Android Debug Bridge version 1.0.%d', version);
       });
-
+*/
       log('***************cmdtest*hc');
       //adb.execCommand('devices', function (stdout) {log( stdout); });
-      adb.execCommand('uptime');
-      log('***************cmdtest*hc');
+
 
       /*adb.listDevices(function (devices) {
           log('found %d device %s', devices.length, devices);
       });
 */
-
+//adb.execCommand('shell:uptime', function (data){    callback(printString(adb, data));});
+//log('***************cmdtest*hc');
   /*
-      adb.traceDevice(function (devices) {
-          log('found %d device %s', devices.length, devices);
 
-          for (var i=0; i<devices.length; i++) {
-              var device = devices[i];
-
-              device.takeSnapshot(function (frame) {
-                  frame.writeImageFile('snapshot.jpg');
-              });
-
-
-              device.getSyncService(function (svc) {
-                  svc.pullFile('/system/framework/framework.odex', './framework.odex', function (size) {
-                      console.log("pull %d bytes file", size);
-                    });
-              });
-
-          }
-      });
 */
+adb.traceDevice(function (devices) {
+    log('found %d device %s', devices.length, devices);
 
+    for (var i=0; i<devices.length; i++) {
+        var device = devices[i];
+        console.log('***************cmdtest*hc');
+        console.log(device);
+
+
+
+
+        device.getSyncService(function (svc) {
+          //console.log();
+
+        });
+
+    }
+});
     }
 
      else {
@@ -155,15 +154,6 @@ function listen(port) {
       );
     }
     if(argv.g){
-      /*
-	var adbhost = require('adbhost');
-	var adb   = adbhost.createConnection({host: process.argv[2]});
-	var shell = adb.createStream('shell:');
-	process.stdin.pipe(shell);
-	shell.pipe(process.stdout);
-  */
-//  server.adb();
-
 /*
   var DebugBridge = require('/Users/Hector/Dropbox/2School15/capstone/heatmap.js-master/node_modules/adb.js').DebugBridge;
   var adb = new DebugBridge();

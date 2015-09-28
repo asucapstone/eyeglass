@@ -1,0 +1,20 @@
+http://codecondo.com/10-web-application-frameworks-for-node-js/
+
+http://www.devsaran.com/blog/10-best-nodejs-frameworks-developers
+
+http://www.infoworld.com/article/2606426/application-development/153472-13-fabulous-frameworks-for-Node.js.html#slide11
+
+
+#these are the websites themselves
+https://masteringmean.com/lessons/417-Starting-out-with-Nodejs-and-AngularJS 
+
+http://expressjs.com/
+
+https://www.totaljs.com/
+
+
+#this one is my favorite.. poorly documented 
+https://www.google.com/design/spec/material-design/introduction.html
+
+#better fit from materials implementation
+http://feedly.com/

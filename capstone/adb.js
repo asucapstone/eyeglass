@@ -248,6 +248,20 @@ function parseDevices(adb, data) {
     return devices;
 }
 
+function printString(adb, data) {
+    var lines = data.toString().split('\n');
+    var devices = [];
+
+    for (var i=0; i<lines.length; i++) {
+        //var o = lines[i].split('\t');
+            devices.push(lines[i]);
+    }
+
+    return devices;
+}
+
+
+
 DebugBridge.prototype.listDevices = function (callback /* (devices: AndroidDevice[]) */) {
     var adb = this;
 

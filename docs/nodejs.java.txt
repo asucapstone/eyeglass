@@ -1,0 +1,26 @@
+
+NODEJS: Start a java process
+
+You can start a child process, and send a kill signal when you don't need it.
+var spawn = require('child_process').spawn;
+var child = spawn('java', ['params1', 'param2']);
+
+To kill the application, or to simulate a CTRL+C, send a signal:
+// control + c is an interrupt signal
+child.kill('SIGINT');
+
+// or send from the main process
+process.kill(child.pid, 'SIGINT');
+
+
+To run the application detached, run it like this:
+// keep track of PID 
+var fs = require('fs');
+var out = fs.openSync('./out.log', 'a');
+var err = fs.openSync('./out.log', 'a');
+
+var child = spawn('java', [], {
+ detached: true,
+ stdio: [ 'ignore', out, err ]
+});
+child.unref();
