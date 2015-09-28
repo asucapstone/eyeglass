@@ -18,7 +18,9 @@ git config --global user.email you@somedomain.com
 to commit, with message
 git commit -m 'my hola mundo changes'
 
-
-
-to commit all entire project:
+or to commit all entire project:
 git commit -am "message to changes "
+
+
+push changes to master branch
+git push origin master
