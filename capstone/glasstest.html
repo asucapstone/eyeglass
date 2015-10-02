@@ -129,6 +129,7 @@ $(document).ready(function() {
 });
 
 function processData(allText) {
+  //eg:Frame#: 39346         X: 59.49%    Y: 58.06%    Timestamp#: 40380443.44
     var record_num = 5;  // or however many elements there are in each row
     var allTextLines = allText.split(/\r\n|\n/);
     var entries = allTextLines[0].split(',');
