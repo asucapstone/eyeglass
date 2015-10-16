@@ -191,9 +191,9 @@ var Store = (function StoreClosure() {
     },
     getData: function() {
       return this._unOrganizeData();
-    }/*,
+    },
 
-      TODO: rethink.
+      //TODO: rethink.
 
     getValueAt: function(point) {
       var value;
@@ -229,7 +229,7 @@ var Store = (function StoreClosure() {
         }
       }
       return false;
-    }*/
+    }
   };
 
 

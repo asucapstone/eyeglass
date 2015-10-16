@@ -50,12 +50,10 @@
 
   <div id="heatmapContainerWrapper">
     <div id="heatmapContainer">
-
     <video id = "Video1" width = "840" height ="460" >
               <source src="../data/20150912_142740_562.mp4" type="video/mp4">
                   </video>
     </div>
-
   </div>
 
 
@@ -64,56 +62,50 @@
 
 
   <script>
-
-
 //server: https://github.com/indexzero/http-server
 //nodejs : sudo http-server ./ -p 1337
 //python:  python -m SimpleHTTPServer 1337
   //  window.onload = function() {
       // create a heatmap instance
+var heatmap, heatmapContainer ;
 
-      var heatmap = h337.create({
+
+      heatmap = h337.create({
         container: document.getElementById('heatmapContainer'),
         maxOpacity: .6, //transparency
         radius: 20, //dot radius
         blur: .90,
-        // backgroundColor with alpha so you can see through it
-      //  backgroundColor: 'rgba(0, 0, 58, 0.96)'
         backgroundColor:'transparent'
       });
-      var heatmapContainer = document.getElementById('heatmapContainerWrapper');
-    //};
+      heatmapContainer = document.getElementById('heatmapContainerWrapper');
+
+
 
 var lines1=[];
+var lines2=[];
+var rawData;
     $(document).ready(function() {
         $.ajax({
             type: "GET",
             url: "../../data/eyeframemod.txt",
             dataType: "text",
-            success: function(data) { processData(data);}
+            success: function(data) { processData(data);rawData=data;}
          });
     });
 
     function processData(allText) {
       //eg:Frame#: 39346         X: 59.49%    Y: 58.06%    Timestamp#: 40380443.44
         var allTextLines = allText.split(/\r\n|\n|\r/);
-
+        lines1=[];
         while (allTextLines.length>0) {
             lines1.push(JSON.parse('{'+allTextLines.shift()+'}'));
         }
-addPlot;
     }
-
 
 var framepersecond=60;
 var count=0;
-//var val = eval("document._video.currentTime" );
 
-//http://www.w3.org/2010/05/video/mediaevents.html
-
-//var test= {Frame: 39346,         X: 59.49,    Y: 58.06,    Timestamp: 40380443.44};
-//  var hi =  $("#heatmapContainer").height();
-//  var wid =  $("#heatmapContainer").width();
+//http://www().w3.org/2010/05/video/mediaevents.html
 function addPlot (){
   var line=lines1.shift();
   var xaxis= document.getElementById('heatmapContainer').clientWidth;
@@ -121,7 +113,7 @@ function addPlot (){
 if(line != null){
   heatmap.addData({ x: (xaxis-0)*line.X*.01, y: (yaxis-0)*line.Y*.01, value: 1 });
   count=count +1;
-  if(count> 5)
+  if(count> 5);
   //remove data
 }
 };
@@ -132,6 +124,8 @@ function myFunction() {
 if(  !(document.getElementById("Video1").paused) )
   //if(lines1== null) break;
   myVar =setInterval( addPlot,1000/framepersecond);
+
+
 }
 
 function myStopFunction() {
@@ -157,6 +151,8 @@ function myStopFunction() {
 function restart(){
     var video = document.getElementById("Video1");
     video.currentTime = 0;
+    window.location.reload();
+    processData(rawData);
 };
 function skip(value){
     var video = document.getElementById("Video1");
