@@ -116,7 +116,7 @@ exports.createServer = function (options) {
 };
 
 HTTPServer.prototype.adb = function () {
-  var DebugBridge = require('/Users/Hector/Dropbox/2School15/capstone/heatmap.js-master/node_modules/adb.js').DebugBridge;
+  var DebugBridge = require('adb.js').DebugBridge;
   var adb = new DebugBridge();
    adb.listDevices();
    return;

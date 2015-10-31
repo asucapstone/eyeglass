@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+//process.env['EYEGLASS'] = 'value';
 var colors     = require('colors'),
     httpServer = require('../lib/http-server'),
     portfinder = require('portfinder'),
@@ -50,47 +50,154 @@ if (!argv.s && !argv.silent) {
     if (error) {
       log('[%s] "%s %s" Error (%s): "%s"', date, req.method.red, req.url.red, error.status.toString().red, error.message.red);
     }
-    else if(req.method=='GET' && req.url=='/data/hack.txt'){
-      var DebugBridge = require('/Users/Hector/Dropbox/2School15/capstone/eyeglass-master/node_modules/adb.js').DebugBridge;
+//list devices
+else if(req.method=='GET' && req.url=='/glass/devices'){
+  var exec = require('child_process').exec;
+  var cmd = 'adb devices';
 
-      var adb = new DebugBridge();
+  exec(cmd, function(error, stdout, stderr) {
+  //  console.log("error:"+error+ "\nstd:"+stdout+ "\nstderr:"+stderr+ "\n")
 
-    /*  adb.getVersion(function (version) {
-          console.log('Android Debug Bridge version 1.0.%d', version);
-      });
-*/
-      log('***************cmdtest*hc');
-      //adb.execCommand('devices', function (stdout) {log( stdout); });
+  if(error == null)
+    console.log('[%s] Commmand Executed: "%s"', date, cmd);
+  else {
+    console.log('[%s] Error: "%s"', date, error);
+    console.log('[%s] StdErr: "%s"', date, stderr);
+
+  }
+
+});
+}
+//global.__dirname
+//start eyeglass  and video
+else if(req.method=='GET' && req.url=='/eye/start'){
+  var exec = require('child_process').exec;
+  var cmd = './ql/bin/QuickStartD.exe -o \`pwd\`';
+
+  exec(cmd, function(error, stdout, stderr) {
+
+    if(error == null)
+    console.log('[%s] Commmand Executed: "%s"', date, cmd);
+    else {
+      console.log('[%s] Error: "%s"', date, error);
+      console.log('[%s] StdErr: "%s"', date, stderr);
+      console.log('[%s] Std: "%s"', date, stdout);
+
+    } });
+
+}
+
+//calibrate eye glass
+else if(req.method=='GET' && req.url=='/eye/calibrate'){
+  var exec = require('child_process').exec;
+  var cmd = './ql/bin/QuickStartD.exe -c \`pwd\`';
+
+  exec(cmd, function(error, stdout, stderr) {
+
+    if(error == null)
+      console.log('[%s] Commmand Executed: "%s"', date, cmd);
+    else {
+      console.log('[%s] Error: "%s"', date, error);
+      console.log('[%s] StdErr: "%s"', date, stderr);
+
+    } });
+
+}
 
 
-      /*adb.listDevices(function (devices) {
-          log('found %d device %s', devices.length, devices);
-      });
-*/
-//adb.execCommand('shell:uptime', function (data){    callback(printString(adb, data));});
-//log('***************cmdtest*hc');
-  /*
+//start and stop video
+else if(req.method=='GET' && req.url=='/glass/video'){
+  var exec = require('child_process').exec;
+  var cmd = 'adb shell \"am start -a android.media.action.VIDEO_CAPTURE\"';
 
-*/
-adb.traceDevice(function (devices) {
-    log('found %d device %s', devices.length, devices);
+  exec(cmd, function(error, stdout, stderr) {
 
-    for (var i=0; i<devices.length; i++) {
-        var device = devices[i];
-        console.log('***************cmdtest*hc');
-        console.log(device);
+    if(error == null)
+      console.log('[%s] Commmand Executed: "%s"', date, cmd);
+    else {
+      console.log('[%s] Error: "%s"', date, error);
+      console.log('[%s] StdErr: "%s"', date, stderr);
 
+    } });
 
+}
 
+//continue video (must call after 10 seconds)
+else if(req.method=='GET' && req.url=='/glass/continue'){
+  var exec = require('child_process').exec;
+  var cmd = 'adb shell \"input keyevent KEYCODE_CAMERA\"';
 
-        device.getSyncService(function (svc) {
-          //console.log();
+  exec(cmd, function(error, stdout, stderr) {
 
-        });
+    if(error == null)
+      console.log('[%s] Commmand Executed: "%s"', date, cmd);
+    else {
+      console.log('[%s] Error: "%s"', date, error);
+      console.log('[%s] StdErr: "%s"', date, stderr);
 
     }
 });
+}
+
+
+//continue video (must call after 10 seconds)
+else if(req.method=='GET' && req.url=='/glass/pull'){
+  var exec = require('child_process').exec;
+  var cmd = 'adb pull /sdcard/DCIM/Camera ./data';
+
+  exec(cmd, function(error, stdout, stderr) {
+
+          if(error == null)
+            console.log('[%s] Commmand Executed: "%s"', date, cmd);
+          else {
+            console.log('[%s] Error: "%s"', date, error);
+            console.log('[%s] StdErr: "%s"', date, stderr);
+
+          }
+           });
+}
+
+//continue video (must call after 10 seconds)
+else if(req.method=='GET' && req.url=='/glass/clean'){
+  var exec = require('child_process').exec;
+  var cmd = 'adb shell \"rm /sdcard/DCIM/Camera/*\"';
+
+  exec(cmd, function(error, stdout, stderr) {
+    if(error == null)
+      console.log('[%s] Commmand Executed: "%s"', date, cmd);
+    else {
+      console.log('[%s] Error: "%s"', date, error);
+      console.log('[%s] StdErr: "%s"', date, stderr);
+
     }
+    });
+
+}
+
+//get adb version
+else if(req.method=='GET' && req.url=='/data/version'){
+  var exec = require('child_process').exec;
+  var cmd = 'adb version';
+
+  exec(cmd, function(error, stdout, stderr) {
+
+    if(error == null)
+      console.log('[%s] Commmand Executed: "%s"', date, cmd);
+    else {
+      console.log('[%s] Error: "%s"', date, error);
+      console.log('[%s] StdErr: "%s"', date, stderr);
+
+    }
+   });
+
+    }
+
+
+
+
+
+
+
 
      else {
       log('[%s] "%s %s" "%s"', date, req.method.cyan, req.url.cyan, req.headers['user-agent']);
@@ -178,17 +285,3 @@ process.on('SIGINT', function() {
   process.exit();
 
 });
-
-//[System.Web.Services.WebMethods]
-
-
-//this is added
-/*HC
-var spawn = require('child_process').spawn;
-
-//var _ = require('underscore'); // for some utility goodness
-var deploySh = spawn('sh', [ '/Users/Hector/Downloads/heatmap.js-master/examples/capstone/script.sh' ], {
-  cwd: process.env.HOME + '/examples/capstone/'
-//,  env:_.extend(process.env, { PATH: process.env.PATH + ':/usr/local/bin' })
-});
-*/

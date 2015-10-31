@@ -1,0 +1,8 @@
+#required steps to run server
+
+
+cd path/to/project
+export EYEGLASS=/path/to/project
+
+ ./server/bin/http-server -p 1037 ./
+ #or  $EYEGLASS/server/bin/http-server -p 1037 $EYEGLASS/
