@@ -7,7 +7,8 @@ var colors     = require('colors'),
     argv = require('optimist')
       .boolean('cors')
       .argv;
-
+  var execGlass = require('child_process').exec;
+  var play=0;
 
 if (argv.h || argv.help) {
   console.log([
@@ -71,10 +72,12 @@ else if(req.method=='GET' && req.url=='/glass/devices'){
 //global.__dirname
 //start eyeglass  and video
 else if(req.method=='GET' && req.url=='/eye/start'){
-  var exec = require('child_process').exec;
-  var cmd = './ql/bin/QuickStartD.exe -o \`pwd\`';
-
-  exec(cmd, function(error, stdout, stderr) {
+  //var exec = require('child_process').exec;
+  var cmd = '%CAPSTONE%\\ql\\bin\\QuickStartD.exe -o %CAPSTONE%\\data';
+  
+  
+  if (play == 0){
+  execGlass(cmd, function(error, stdout, stderr) {
 
     if(error == null)
     console.log('[%s] Commmand Executed: "%s"', date, cmd);
@@ -84,14 +87,18 @@ else if(req.method=='GET' && req.url=='/eye/start'){
       console.log('[%s] Std: "%s"', date, stdout);
 
     } });
+	play = 1; 
+	}
+	else{
+	execGlass.kill('SIGINT');
+	}
 
 }
 
 //calibrate eye glass
 else if(req.method=='GET' && req.url=='/eye/calibrate'){
   var exec = require('child_process').exec;
-  var cmd = './ql/bin/QuickStartD.exe -c \`pwd\`';
-
+  var cmd = '%CAPSTONE%\\ql\\bin\\QuickStartD.exe -c %CAPSTONE%\\data';
   exec(cmd, function(error, stdout, stderr) {
 
     if(error == null)
@@ -108,7 +115,7 @@ else if(req.method=='GET' && req.url=='/eye/calibrate'){
 //start and stop video
 else if(req.method=='GET' && req.url=='/glass/video'){
   var exec = require('child_process').exec;
-  var cmd = 'adb shell \"am start -a android.media.action.VIDEO_CAPTURE\"';
+  var cmd = '%ADB%\\adb.exe shell \"am start -a android.media.action.VIDEO_CAPTURE\"';
 
   exec(cmd, function(error, stdout, stderr) {
 
@@ -125,7 +132,7 @@ else if(req.method=='GET' && req.url=='/glass/video'){
 //continue video (must call after 10 seconds)
 else if(req.method=='GET' && req.url=='/glass/continue'){
   var exec = require('child_process').exec;
-  var cmd = 'adb shell \"input keyevent KEYCODE_CAMERA\"';
+  var cmd = '%ADB%\\adb.exe shell \"input keyevent KEYCODE_CAMERA\"';
 
   exec(cmd, function(error, stdout, stderr) {
 
@@ -143,7 +150,7 @@ else if(req.method=='GET' && req.url=='/glass/continue'){
 //continue video (must call after 10 seconds)
 else if(req.method=='GET' && req.url=='/glass/pull'){
   var exec = require('child_process').exec;
-  var cmd = 'adb pull /sdcard/DCIM/Camera ./data';
+  var cmd = '%ADB%\\adb.exe pull /sdcard/DCIM/Camera %CAPSTONE%\\data';
 
   exec(cmd, function(error, stdout, stderr) {
 
@@ -160,7 +167,7 @@ else if(req.method=='GET' && req.url=='/glass/pull'){
 //continue video (must call after 10 seconds)
 else if(req.method=='GET' && req.url=='/glass/clean'){
   var exec = require('child_process').exec;
-  var cmd = 'adb shell \"rm /sdcard/DCIM/Camera/*\"';
+  var cmd = '%ADB%\\adb.exe shell \"rm /sdcard/DCIM/Camera/*\"';
 
   exec(cmd, function(error, stdout, stderr) {
     if(error == null)
@@ -177,7 +184,7 @@ else if(req.method=='GET' && req.url=='/glass/clean'){
 //get adb version
 else if(req.method=='GET' && req.url=='/data/version'){
   var exec = require('child_process').exec;
-  var cmd = 'adb version';
+  var cmd = '%ADB%\\adb.exe version';
 
   exec(cmd, function(error, stdout, stderr) {
 
@@ -191,13 +198,6 @@ else if(req.method=='GET' && req.url=='/data/version'){
    });
 
     }
-
-
-
-
-
-
-
 
      else {
       log('[%s] "%s %s" "%s"', date, req.method.cyan, req.url.cyan, req.headers['user-agent']);

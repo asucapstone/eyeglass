@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Team-June Capstone Project</title>
+
+<!-- jQuery -->
+<script src="js/jquery.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="js/bootstrap.min.js"></script>
+<script src="../build/jquery.min.js" type="text/javascript"></script>
+<script src="../build/heatmap.js"></script>
+<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<script src="../plugins/leaflet-heatmap.js"></script>
+
+
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/landing-page.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style> 
+        #buttonbar {
+            line-height:30px;
+            /*background-color:#eeeeee;*/
+            background-color:#FFFFFF;
+
+            /*float:left;*/
+            /*width:840px;*/
+            height: 100%;
+            width: 100%;
+            color: #000000;
+        }
+    
+        #heatmapContainerWrapper {
+           /* height:460px;*/
+            /*width:840px;*/
+            height:100%;
+            width:100%
+            float:center;
+            padding:0px;
+        }
+        #heatmapContainer {
+            /* height:460px;*/
+           /* width:840px;*/
+           height:100%;
+           width:100%
+            float:center;
+            padding:0px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
+        <div class="container topnav">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand topnav" href="#">Google Glass EyeTracking</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#Demo">Demo</a>							<!--DD changed the href location and displayed test to Demo-->
+                    </li>
+                    <li>
+                        <a href="#VT3">VT3 Mini</a>					<!--DD changed the href location and displayed test to VT3-->
+                    </li>
+                    <li>
+                        <a href="#Glass">Glass</a>					<!--DD changed to third position and changed the href Glass-->
+                    </li>													<!--   and displayed test to Glass-->
+                    <li>
+                        <a href="#Calibration">Calibration</a>					<!--DD added another item to navbar called Calibration-->
+                    </li>
+                    <li>
+                        <a href="#contact">Contact</a>
+                    </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+
+    <!-- Header -->
+    <a name="Demo"></a>
+    <div class="intro-header">
+        <div id="heatmapContainerWrapper">
+            <div id="heatmapContainer">
+                
+                <video id = "Video1" width = 100% height =100%>
+                    <source src="../data/20151116_221859_366.mp4" type="video/mp4">
+                        </video>
+            </div>
+            
+        </div>
+        
+        <script>
+            //server: https://github.com/indexzero/http-server
+            //nodejs : sudo http-server ./ -p 1337
+            //python:  python -m SimpleHTTPServer 1337
+            //  window.onload = function() {
+            // create a heatmap instance
+            var heatmap, heatmapContainer ;
+            
+            
+            heatmap = h337.create({
+                                  container: document.getElementById('heatmapContainer'),
+                                  maxOpacity: .6, //transparency
+                                  radius: 20, //dot radius
+                                  blur: .90,
+                                  backgroundColor:'transparent'
+                                  });
+                                  heatmapContainer = document.getElementById('heatmapContainerWrapper');
+                                  
+                                  
+                                  
+                                  var lines1=[];
+                                  var lines2=[];
+                                  var rawData;
+ 
+        
+        var framepersecond=60;
+        var count=0;
+        
+		
+										  
+                                                    $.ajax({
+                                                           type: "GET",
+                                                           url: "/data/output.txt",
+                                                           dataType: "text",
+                                                           success: function(data) { processData(data);rawData=data;}
+                                                           });
+														   
+                                                    function processData(allText) {
+                                                        //eg:Frame#: 39346         X: 59.49%    Y: 58.06%    Timestamp: 40380443.44
+                                                        var allTextLines = allText.split(/\r\n|\n|\r/);
+                                                        lines1=[];
+                                                        while (allTextLines.length>0) {
+															var text =allTextLines.shift();
+															if (text.length >5) {
+																var line = JSON.parse('{'+text+'}');
+																if (line.Timestamp > 1500)
+																lines1.push(line);
+															}
+                                                        }
+                                                    }
+        //http://www().w3.org/2010/05/video/mediaevents.html
+        function addPlot (){
+            var line=lines1.shift();
+            var xaxis= document.getElementById('heatmapContainer').clientWidth;
+            var yaxis= document.getElementById('heatmapContainer').clientHeight;
+            if(line != null){
+                heatmap.addData({ x: (xaxis-0)*line.X*.01, y: (yaxis-0)*line.Y*.01, value: 1 });
+                count=count +1;
+                if(count> 5);
+                //remove data
+            }
+        };
+        
+        var myVar;
+        
+        function myFunction() {
+            if(  !(document.getElementById("Video1").paused) )
+            //if(lines1== null) break;
+            myVar =setInterval( addPlot,1000/framepersecond);
+            
+            
+        }
+        
+        function myStopFunction() {
+            clearInterval(myVar);
+        }
+        
+        function init_devices(){
+
+                //Ajax request to make sure that Google Glass is connected
+                $(document).ready(function() {
+                                  $.ajax({
+                                           type: "GET",
+                                           url: "/glass/clean",
+                                           dataType: "text",
+                                           success: function() {}
+                                            });
+                                   });
+        };
+        //Starts the Calibration of the eyetracker
+        function init_Calibrate(){
+            $(document).ready(function() {
+                               $.ajax({
+                               type: "GET",
+                               url: "/eye/calibrate",
+                               dataType: "text",
+                               success: function() {}
+                               });
+                              });
+                              //Ajax request to make sure that Google Glass is connected
+            $(document).ready(function() {
+                              /*$.ajax({
+                              type: "GET",
+                              url: "/data/eyeframemod.txt",
+                              dataType: "text",
+                              success: function(data) { processData(data);rawData=data;}
+                              });*/
+                            });
+            
+        };
+        //Starts capturing data from both the eyetracker and Google Glass
+        function init_capture(){
+            //Start the capturing from Google Glass Video
+            $(document).ready(function() {
+                               $.ajax({
+                               type: "GET",
+                               url: "/glass/video",
+                               dataType: "text",
+                               success: function() {}
+                               })
+                              });
+            //Another Request to the Google Glass to continue
+             $(document).ready(function() {
+                               $.ajax({
+                               type: "GET",
+                               url: "/glass/continue",
+                               dataType: "text",
+                               success: function() {}
+                               });
+                               });
+                               
+            //Ajax request to start Eye Tracking Capture
+            $(document).ready(function() {
+                                $.ajax({
+                                type: "GET",
+                                url: "/eye/start",
+                                dataType: "text",
+                                success: function() {}
+                                    });
+                                });
+                                
+
+        }
+        
+        function stop_capture(){
+            //Stop google Glass recording
+            $(document).ready(function() {
+                               $.ajax({
+                               type: "GET",
+                               url: "/glass/video",
+                               dataType: "text",
+                               success: {}
+                               });
+                            
+							$.ajax({
+                               type: "GET",
+                               url: "/eye/start",
+                               dataType: "text",
+                               success: function(data) { processData(data);rawData=data;}
+                               });
+							   
+                               $.ajax({
+                               type: "GET",
+                               url: "/glass/pull",
+                               dataType: "text",
+                               success: {}
+                               });
+                            			
+		                               });
+
+        }
+        
+        
+        function vidplay() {
+            var video = document.getElementById("Video1");
+            var button = document.getElementById("play");
+            if(video.paused){
+                video.play();
+                myFunction();
+                button.textContent = "Stop";
+            }
+            else {
+                video.pause();
+                myStopFunction();
+                button.textContent = "Start";
+            }
+        };
+        function restart(){
+            var video = document.getElementById("Video1");
+            video.currentTime = 0;
+            window.location.reload();
+            processData(rawData);
+        };
+        function skip(value){
+            var video = document.getElementById("Video1");
+            video.currentTime += value;
+        };
+        </script>
+        <div id ="buttonbar">
+            <button id="Initiate Devices" class="btn btn-primary btn-lg" onclick="init_devices()">Initiate</button>
+            <button id="Calibrate" class="btn btn-primary btn-lg" onclick="init_Calibrate()">Calibrate</button>
+            <button id="Capture" class="btn btn-primary btn-lg" onclick="init_capture()">Capture</button>
+             <button id="Stop Capture" class="btn btn-primary btn-lg" onclick="stop_capture();">Stop Capture</button>
+            <button id="play" class="btn btn-primary btn-lg" onclick="vidplay()">Play</button>
+            <button id="restart"  class="btn btn-primary btn-lg" onclick="restart();">Restart</button>
+            
+
+            
+        </div>
+
+
+    </div>
+    <!-- /.intro-header -->
+
+    <!-- Page Content -->
+
+	<a  name="VT3"></a>
+    <div class="content-section-a">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5 col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">EyeTech Digital Systems:<br>VT3 Mini</h2>
+                    <p class="lead">The <a target="_blank" href="http://www.eyetechds.com/vt3-mini-research.html">  <!--DD changed text and hyperlink-->
+                        VT3 Mini</a> is an eye tracking module which has been developed by Eyetech Digital Systems and deployed in various environments.
+                    It functions by utilizing two infrared light emiters which reflect off of the retina of the user.  This reflection is then monitored
+                    and tracked by an infrared camera.  the VT3 Mini is the perfect choice for those looking for the best value in professional eye tracking.
+                    For more information check out <a target="_blank" href="http://www.eyetechds.com/vt3-mini-research.html">this link<a/>.
+                        </p>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <div class="col-lg-5 col-lg-offset-2 col-sm-6">
+                    <img class="img-responsive" src="img/eyetracker.JPG" alt="">
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+    
+    <a  name="Glass"></a>
+    <div class="content-section-b">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">Glass<br>by Google</h2>
+                    <p class="lead"><a target="_blank" href="https://support.google.com/glass/answer/3064128?hl=en">Glass</a> was a project
+                    started by Google back in 2011.  Its initial protoype weighed a hefty eight pounds.
+                    This was followed by subsequent improvements leading to a beta version that was distributed to qualified testers in
+                    April of 2013.  This "Explorer Edition" weighed less than a typical pair of sunglasses.  In January of 2015
+                    the production of the Glass Prototype was ceased, but development on the system is still being encouraged.  For more
+                    information about Glass and some specifications please follow
+                    <a target="_blank" href="https://support.google.com/glass/answer/3064128?hl=en">this link.</a>
+                    </p>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <div class="col-lg-5 col-sm-pull-6  col-sm-6">
+                    <img class="img-responsive" src="img/glass.JPG" alt="">
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-b -->
+    
+    <!-- Page Content -->
+    
+    <a  name="Calibration"></a>
+    <div class="content-section-a">
+        
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5 col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">Calibration</h2>
+                    <p class="lead">Once all of the components are together there is an inital callibration sequence which is
+                    put into place.  This gives the VT3 Mini an opportunity to measure and calibrate the users eye movements.  For
+                    this procedure a calibration box was created in order to ensure that the users head did not move during the process.  The
+                    user places their head against the rest and comfortably orients their head in a forward facing position looking
+                    at the callibration mat.  The Glass forward looking video camera is also then oriented so as to be centered over the mat.
+                    Once the callibration sequence has begun the user progressively looks at a series of nine dots on the mat.
+                    The eyetracker records these reference points and calibrates the system accordingly.  Once the calibration is complete the mat
+                    can be removed and the user can then begin to look at that field of view while Glass and the VT3 Mini both pull in data and video for overlay.
+                    </p>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <div class="col-lg-5 col-lg-offset-2 col-sm-6">
+                    <img class="img-responsive" src="img/box1.JPG" alt="">
+                        <br>
+                        <img class="img-responsive" src="img/box2.JPG" alt="">
+                        </div>
+            </div>
+            
+        </div>
+        <!-- /.container -->
+        
+    </div>
+    <!-- /.content-section-a -->
+
+    <!-- /.content-section-a -->
+    <br>
+    <br>
+    <br>
+    <br>
+	<a  name="contact"></a>
+    <div class="banner">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2>Connect to Google Glass EyeTracking Project:</h2>
+                </div>
+                <div class="col-lg-6">
+                    <ul class="list-inline banner-social-buttons">
+                        <li>
+                            <a href="https://github.com/asucapstone/eyeglass" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    
+    
+    <!-- /.banner -->
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="list-inline">
+                        <li>
+                            <a href="#">Home</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
+                            <a href="#Demo">Demo</a>					<!--DD changed the href location and displayed test to Demo-->
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
+                            <a href="#VT3">VT3 Mini</a>			<!--DD changed the href location and displayed test to VT3-->
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>		<!--DD added a divider into the footer-->
+                        <li>
+                            <a href="#Glass">Glass</a>			<!--DD added this reference to the Glass in the footer-->
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
+                            <a href="#contact">Contact</a>
+                        </li>
+
+                    </ul>
+                    <p class="copyright text-muted small">ASU CSE424 Capstone II - Team June 2015.</p>   <!--DD changed copyright and company name text-->
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+</body>
+
+</html>
