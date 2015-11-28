@@ -1,0 +1,24 @@
+﻿Build started 11/27/2015 7:39:55 PM.
+     1>Project "C:\Users\mwcullen\Documents\GitHub\GlassTrack\GlassTrack\GlassTrack\GlassTrack\GlassTrack.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\mwcullen\Documents\GitHub\GlassTrack\GlassTrack\GlassTrack\\header /IC:\Users\mwcullen\Documents\GitHub\GlassTrack\GlassTrack\GlassTrack\..\OpenCV2.2\include /IC:\Users\mwcullen\Documents\GitHub\GlassTrack\GlassTrack\GlassTrack\..\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _CRT_SECURE_NO_WARNINGS /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\src\Calibrate.cpp ..\src\DisplayVideo.cpp ..\src\Initialize.cpp ..\src\Main.cpp ..\src\OpencvUtility.cpp ..\src\QL2Utility.cpp
+         QL2Utility.cpp
+         OpencvUtility.cpp
+         Main.cpp
+         Initialize.cpp
+         DisplayVideo.cpp
+         Calibrate.cpp
+         Generating Code...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\mwcullen\Documents\GitHub\GlassTrack\GlassTrack\GlassTrack\$\..\..\bin\GlassTrack.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Users\mwcullen\Documents\GitHub\GlassTrack\GlassTrack\GlassTrack\..\OpenCV2.2\lib /LIBPATH:C:\Users\mwcullen\Documents\GitHub\GlassTrack\GlassTrack\GlassTrack\..\lib opencv_core220.lib opencv_highgui220.lib opencv_imgproc220.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\mwcullen\Documents\GitHub\GlassTrack\GlassTrack\GlassTrack\$\..\..\bin\GlassTrack.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\mwcullen\Documents\GitHub\GlassTrack\GlassTrack\GlassTrack\$\..\..\bin\GlassTrack.lib" /MACHINE:X86 Debug\Calibrate.obj
+         Debug\DisplayVideo.obj
+         Debug\Initialize.obj
+         Debug\Main.obj
+         Debug\OpencvUtility.obj
+         Debug\QL2Utility.obj
+         GlassTrack.vcxproj -> C:\Users\mwcullen\Documents\GitHub\GlassTrack\GlassTrack\GlassTrack\$\..\..\bin\GlassTrack.exe
+     1>Done Building Project "C:\Users\mwcullen\Documents\GitHub\GlassTrack\GlassTrack\GlassTrack\GlassTrack\GlassTrack.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:06.23
