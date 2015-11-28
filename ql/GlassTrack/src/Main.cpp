@@ -168,7 +168,7 @@ int main(int argc, char* argv[])
 					if (frameData.WeightedGazePoint.Valid) {
 						adjustedTimestamp = frameData.ImageData.Timestamp - timestampOffset;
 						printf_s(
-							"\r\"Frame\": %-10d,\"X\":%6.2f%%,\"Y\":%6.2f%%,\"Timestamp\": %6.2f",
+							"\r\"Frame\": %-10d,\"X\":%6.2f%,\"Y\":%6.2f%,\"Timestamp\": %6.2f",
 							frameData.ImageData.FrameNumber,
 							frameData.WeightedGazePoint.x,
 							frameData.WeightedGazePoint.y,
@@ -176,7 +176,7 @@ int main(int argc, char* argv[])
 
 						fprintf_s(
 							output,
-							"\r\"Frame\": %-10d,\"X\":%6.2f%%,\"Y\":%6.2f%%,\"Timestamp\": %6.2f",
+							"\r\"Frame\": %-10d,\"X\":%6.2f%,\"Y\":%6.2f%,\"Timestamp\": %6.2f",
 							frameData.ImageData.FrameNumber,
 							frameData.WeightedGazePoint.x,
 							frameData.WeightedGazePoint.y,
